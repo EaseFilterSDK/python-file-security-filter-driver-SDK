@@ -1,5 +1,4 @@
-# A Python File Security Filter Driver SDK Demo
-[File security filter driver SDK](https://www.easefilter.com/Forums_Files/Comprehensive-file-security-sdk.htm)
+# [A Python File Security Filter Driver SDK Demo](https://www.easefilter.com/Forums_Files/Comprehensive-file-security-sdk.htm)
 
 This is a demo library that provides a Pythonic API over the EaseFilter File System Filter Driver SDK.
 The source code is throughly documented, and intended to serve as an example for using EaseFilter.
