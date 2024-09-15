@@ -1,30 +1,208 @@
-# FileSecuritySDK
-[File security filter driver SDK](https://www.easefilter.com/Forums_Files/Comprehensive-file-security-sdk.htm)
- 
-EaseFilter Comprehensive File Security SDK is a set of file system filter driver software development kit which includes file monitor filter driver, file access control filter driver, transparent file encryption filter driver, process filter driver and registry filter driver. In a single solution, EaseFilter Comprehensive File Security SDK encompasses file security, digital rights management, encryption, file monitoring, file auditing, file tracking, data loss prevention, process monitoring and protection, and system configuration protection. 
+# EaseFilter Python
 
-![File protector](https://www.easefilter.com/Images/ControlFilter.png)
+This is a demo library that provides a Pythonic API over the EaseFilter driver.
+The source code is throughly documented, and intended to serve as an example
+for using EaseFilter.
 
-EaseFilter file system filter driver is a kernel-mode component that runs as part of the Windows executive above the file system. The EaseFilter file system filter driver can intercept requests targeted at a file system or another file system filter driver. By intercepting the request before it reaches its intended target, the filter driver can extend or replace functionality provided by the original target of the request. The EaseFilter file system filter driver can log, observe, modify, or even prevent the I/O operations for one or more file systems or file system volumes.
- 
-1. File System Monitor Filter Driver. 
+A CLI is included, based on the C++ demo.
 
-File System Monitor Filter Driver can proactively track, audit, report, alert on and respond to, all access to files and folders on Windows systems in real time. With the real-time notifications of the file access, it can help you to detect and stop advanced persistent security threats to your sensitive files. File System Monitor Filter Driver SDK can monitor the file system I/O activities on the fly. With file system monitor filter you can monitor the file activities on file system level, capture file open, create, overwrite, read, write, query file information, set file information, query security information, set security information, file rename, file delete, directory browsing and file close I/O requests. Create your own Continuous Data Protection (CDP) software to log the file update information, write information with offset and length in real time. Audit your file content, you can intercept any file system call, analyze the content and log it. Create Access Logs, you will know who, when, what files were accessed. Journal the file update information. This control may be based on any file parameters, such as its location, type, size, etc.
- 
-2. File System Control Filter Driver.
+*Python version 3.9 or above is required* to use this program.
+Also, **a license key is required**. Contact
+[info@easefilter.com](mailto:info@easefilter.com) for a trial key.
 
-EaseFilter File System Control Filter Driver provides you with an easy way to develop the Windows application which can implement software for file protection, file access control and security control. Your application can allow or deny the request, modify the request with your own data, or post-process the request. Your application can fully control file open/create/overwrite, read/write, query/set file attribute/size/time security information, rename/delete, directory browsing these I/O requests.
+The provided interfaces include:
 
-3. Transparent File Encryption Filter Driver.
+* Monitoring of the Windows Registry
 
-Transparent Encryption File System Filter Driver allows you to develop transparent on-access, per-file encryption Windows application without the driver encryption knowledge. EaseFilter encryption library can help you to handle most of the complexity in encryption operations.EaseFilter Encryption SDK was implemented with Isolation Mini Filter Driver. The well-designed EaseFilter Isolation Minifilter could allow both views, the decrypted view of the file’s contents and the encrypted view of the file’s contents, to different applications reading the file simultaneously. It can automatically decrypt data from an encrypted document when accessed by authorized application likes Microsoft Word.  However, when that same encrypted document is accessed from an unauthorized application, for example a backup application, the Isolation Minifilter could provide the raw, encrypted contents of the file.
+* Monitoring of specific processes
 
-4. Process Filter Driver
+* Monitoring of file/folder access
 
-Process Filter Driver is a kernel-mode driver that filters process/thread creation and termination, it provides you an easy way to develop Windows application for the Windows process monitoring and protection. With the EaseFilter Process Filter Driver, it enables your application to prevent the untrusted executable binaries ( malwares) from being launched, protect your data being damaged by the untrusted processes. It also enables your application to get the callback notification for the process/thread creation or termination, from the new process information you can get the parent process Id and thread Id of the new created process, you also can get the exact file name that is used to open the executable file and the command line that is used to execute the process if it is available.
+* Control of file/folder access
 
-5. Registry Filter Driver
+* Filesystem-level encryption of specific folders and files
 
-Registry Filter Driver is a kernel-mode driver that filters registry calls, it provides you an easy way to develop Windows application for registry monitoring and protection, track the registry change and prevent the registry from being changed by unauthorized processes or users. With the EaseFilter Registry Filter Driver, it enables your application to protect Windows core registry keys and values and to prevent potentially damaging system configuration changes, besides operating system files. By registering a RegistryCallback routine in the registry filter driver, it can receive notifications of each registry operation before the configuration manager processes the operation.
+## Installation
 
-[Read more about EaseFilter Comprehensive File Security SDK Solution](https://www.easefilter.com/Forums_Files/Comprehensive-file-security-sdk.htm)
+NOTE: Administrator permissions are required to run EaseFilter.
+
+### Install with Hatch
+
+The recommended installation method uses [Hatch](https://hatch.pypa.io/latest/),
+which takes care of the project dependencies.
+
+First, [install Python](https://www.python.org/downloads/).
+
+Then, install hatch:
+
+    pip install hatch
+
+Edit the license key field in `config.toml`:
+
+    license_key = "..."
+
+Change to this directory, and to run the included CLI, use:
+
+    hatch run cli [args]
+
+Otherwise, to start a Python REPL (command line), run:
+
+    hatch run py
+
+In this environment, you can import the `easefilter` module to interface with
+the filter. The CLI's code is available at `easefilter/cli/main.py`, and can
+serve as an example for using this library.
+
+### Manual installation
+
+If you do not wish to use Hatch, you can run this project directly through Python.
+
+First, [install Python](https://www.python.org/downloads/).
+
+Then, install the dependencies:
+
+    pip install -r requirements.txt
+
+Edit the license key field in `config.toml`:
+
+    license_key = "..."
+
+To run the CLI, use:
+
+    python -m easefilter.cli [args]
+
+And to start a Python REPL, change directory here, and run Python normally:
+
+    python
+
+## Visual Studio
+
+Visual Studio can be used to navigate this codebase easily. Open
+`ef-python.sln` to open this project.
+
+There are no integrations for debugging/running the code directly in VS. Use
+the terminal to install and run this project.
+
+It may be helpful to set up a virtual environment; to do this, select `Tools /
+Python / Python Environments` and click `Add environment`.
+
+## CLI examples
+
+Here are a few example CLI commands to try.
+
+To get detailled help, run
+
+    hatch run cli --help
+
+or, for help on a specific subcommand,
+
+    hatch run cli monitor --help
+
+For documentation on event types you can register, see the file `easefilter/enums.py`.
+
+### Monitor filter
+
+Default settings, creates a test directory (`C:\easefilter_demo`) and monitors its contents:
+
+    hatch run cli monitor
+
+Monitor events for all files on your device:
+
+    hatch run cli monitor *
+
+Monitor a specific directory:
+
+    hatch run cli monitor "C:\directory\*"
+
+Enable monitoring all specific events (the `--io-mask` is shorthand for all the bitflags combined):
+
+    hatch run cli monitor --io-mask 192118399729052330
+
+Monitor all file handle creation events:
+
+    hatch run cli monitor --io-sym POST_CREATE
+
+### Control filter
+
+Deny all file writes in a directory:
+
+    hatch run cli control --deny-sym "ALLOW_WRITE_ACCESS,ALLOW_OPEN_WITH_CREATE_OR_OVERWRITE_ACCESS" C:\a_directory\*
+
+Deny all reads in the directory (also denies `cd`-ing into directory):
+
+    hatch run cli control --deny-sym "ALLOW_READ_ACCESS,ALLOW_OPEN_WITH_READ_ACCESS" C:\a_directory\*
+
+Deny file listing in a directory (makes directory seem empty):
+
+    hatch run cli control --deny-sym ALLOW_DIRECTORY_LIST_ACCESS C:\a_directory\*
+
+### Process filter
+
+Monitor all process creations/deletions (try starting a PowerShell to test this):
+
+    hatch run cli process
+
+Monitor specifically `cmd.exe`:
+
+    hatch run cli process --proc-mask C:\Windows\System32\cmd.exe
+
+Monitor all System32 processes:
+
+    hatch run cli process --proc-mask C:\Windows\System32\*
+
+(**BE CAREFUL** with this flag) Prevent `cmd.exe` from running:
+
+    hatch run cli process --proc-control-sym DENY_NEW_PROCESS_CREATION --proc-mask C:\Windows\System32\cmd.exe
+
+### Encryption filter
+
+Transparently encrypt a directory:
+
+    hatch run cli encryption 'C:\my_encrypted_dir\*'
+
+This will prompt for a password. The password prompt does not show the
+characters you type in.
+
+Files will only be decrypted while the filter is running. Once stopped, files
+will be encrypted and unreadable.
+
+### Registry filter
+
+Monitor all registry events:
+
+    hatch run cli registry
+
+Monitor all registry events for keys with a matching name:
+
+    hatch run cli registry *KeyName*
+
+Monitor all registry events coming from regedit:
+
+    hatch run cli registry --proc-mask C:\Windows\regedit.exe
+
+Monitor all registry key rename events coming from regedit:
+
+    hatch run cli registry --reg-class-sym Reg_Pre_Rename_Key --proc-mask C:\Windows\regedit.exe
+
+Prevent regedit from deleting keys:
+
+    hatch run cli registry --reg-deny-sym REG_ALLOW_DELETE_KEY --proc-mask C:\Windows\regedit.exe
+
+## Development
+
+To format/lint after changing any code, run
+
+    hatch fmt
+
+or, to do a dry-run and avoid making changes,
+
+    hatch fmt --check
+
+These will run [Ruff](https://astral.sh/ruff) and [Pyright](https://github.com/microsoft/pyright).
+
+Tests can be performed with [pytest](https://pytest.org/) like this:
+
+    hatch test
+
+You may specify a test to run by adding its path (e.g. `tests/test_something.py`) as an argument.
+Consult [pytest's documentation](https://docs.pytest.org/en/stable/) for more information.
