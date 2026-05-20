@@ -124,7 +124,7 @@ namespace  SecureShare
 
                     if (retVal)
                     {
-                        string tagDataStr = GlobalConfig.AccountName + ";" + RegisterForm.GetUniqueComputerId().ToString() + ";" + encryptionIVStr;
+                        string tagDataStr = GlobalConfig.AccountName + ";" + FilterAPI.GetComputerId().ToString() + ";" + encryptionIVStr;
                         byte[] tagData = ASCIIEncoding.ASCII.GetBytes(tagDataStr);
                         e.EncryptionTag = tagData;
 
@@ -275,8 +275,8 @@ namespace  SecureShare
         {
             try
             {
-                //Purchase a license key with the link: http://www.easefilter.com/Order.htm
-                //Email us to request a trial key: info@easefilter.com //free email is not accepted.        
+                //To request a trial or production license key, please contact info@easefilter.com
+                //Requests from free email domains are not accepted        
                 string licenseKey = GlobalConfig.LicenseKey;
 
                 string lastError = string.Empty;
@@ -387,10 +387,6 @@ namespace  SecureShare
 
         private void toolStripButton_ApplyTrialKey_Click(object sender, EventArgs e)
         {
-            RegisterForm webForm = new RegisterForm();
-            webForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-
-            System.Threading.Tasks.Task.Factory.StartNew(() => { webForm.ShowDialog(); });
         }
 
         private void toolStripButton_ClearMessage_Click(object sender, EventArgs e)

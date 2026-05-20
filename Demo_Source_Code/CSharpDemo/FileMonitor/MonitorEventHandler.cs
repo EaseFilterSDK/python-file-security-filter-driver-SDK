@@ -423,12 +423,23 @@ namespace FileMonitor
             //do your job here.
         }
         /// <summary>
+        /// Fires this event after the file was memory mapped.
+        /// </summary>
+        public void OnFileMemoryMapped(object sender, FileIOEventArgs e)
+        {
+            DisplayEventMessage(e);
+            //do your job here.
+        }
+        /// <summary>
         /// Fires this event after the read IO was returned.
         /// </summary>
         public void OnFileRead(object sender, FileReadEventArgs e)
         {
             DisplayEventMessage(e);
             //do your job here.
+
+            //if you want to read the data buffer, make sure you 
+            //set EnableSendReadOrWriteBuffer to true in FileFilterRule.
         }
         /// <summary>
         /// Fires this event after the write IO was returned.
@@ -437,6 +448,9 @@ namespace FileMonitor
         {
             DisplayEventMessage(e);
             //do your job here.
+
+            //if you want to read the data buffer, make sure you 
+            //set EnableSendReadOrWriteBuffer to true in FileFilterRule.
         }
         /// <summary>
         /// Fires this event after the query file size IO was returned.

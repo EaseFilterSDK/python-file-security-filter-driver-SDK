@@ -39,16 +39,16 @@ namespace EaseFilter.FilterControl
         public const uint MAX_AES_HEADER_SIZE = 1024;
         public const uint MAX_AES_TAG_SIZE = 910;
 
-        public const uint FILE_FLAG_OPEN_REPARSE_POINT =  0x00200000;
-        public const uint FILE_FLAG_OPEN_NO_RECALL =  0x00100000;
-        public const uint FILE_FLAG_NO_BUFFERING =  0x20000000;
-        public const uint FILE_ATTRIBUTE_REPARSE_POINT =  (uint)FileAttributes.ReparsePoint;
+        public const uint FILE_FLAG_OPEN_REPARSE_POINT = 0x00200000;
+        public const uint FILE_FLAG_OPEN_NO_RECALL = 0x00100000;
+        public const uint FILE_FLAG_NO_BUFFERING = 0x20000000;
+        public const uint FILE_ATTRIBUTE_REPARSE_POINT = (uint)FileAttributes.ReparsePoint;
 
         //for encryption default IV key
         public static byte[] DEFAULT_IV_TAG = { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
         public enum FilterType : byte
-        {     
+        {
             /// <summary>
             /// File system control filter driver
             /// </summary>
@@ -102,7 +102,7 @@ namespace EaseFilter.FilterControl
         }
 
         //This is the enumeration of the file copy flags.
-        public enum FILE_COPY_FLAG:uint
+        public enum FILE_COPY_FLAG : uint
         {
             //this is the source file for copy in the open.
             CREATE_FLAG_FILE_SOURCE_OPEN_FOR_COPY = 0x00000001,
@@ -190,10 +190,6 @@ namespace EaseFilter.FilterControl
             /// </summary>
             ENABLE_PROTECTION_IF_SERVICE_STOPPED = 0x00020000,
             /// <summary>
-            /// if it is true and write encrypt info to cache is enabled, it will signal the system thread to write cache data to disk right away.
-            /// </summary>
-            ENABLE_SIGNAL_WRITE_ENCRYPT_INFO_EVENT = 0x00020000,
-            /// <summary>
             ///enable this feature when accessFlag "ALLOW_SAVE_AS" or "ALLOW_COPY_PROTECTED_FILES_OUT" was disabled.
             ///by default we don't enable this feature, because of the drawback of these two flags were disabled 
             ///which will block all new file creation of the process which was read the protected files.
@@ -215,7 +211,10 @@ namespace EaseFilter.FilterControl
             /// if it is true it will append the header to the file as the meta data of the stub file.
             /// </summary>
             ENABLE_STUB_FILE_HEADER = 0x00800000,
-
+            /// <summary>
+            /// if it is true and write encrypt info to cache is enabled, it will signal the system thread to write cache data to disk right away.
+            /// </summary>
+            ENABLE_SIGNAL_WRITE_ENCRYPT_INFO_EVENT = 0x01000000,
 
         }
 
@@ -364,10 +363,6 @@ namespace EaseFilter.FilterControl
             /// request the reparse file open.
             /// </summary>
             FILTER_REPARSE_FILE_OPEN_REQUEST = 0x00010023,
-        }
-
-        public enum IOEventName
-        {
             /// <summary>
             /// Fires this event before the file create IO was going down to the file system.
             /// </summary>
@@ -539,14 +534,22 @@ namespace EaseFilter.FilterControl
             /// <summary>
             /// Fires this event after the file close IO was returned from the file system.
             /// </summary>
-            IOPostFileClose,               
+            IOPostFileClose,
+            /// <summary>
+            /// Fires this event before the file was mapped to memory.
+            /// </summary>
+            IOPreAcquireSection = 0x0002002b,
+            /// <summary>
+            /// Fires this event after the file was naooed to memory.
+            /// </summary>
+            IOPostAcquireSection = 0x0002002c,
         }
-     
+
         /// <summary>
         /// the message type of the filter driver send the file IO request 
         /// </summary>
         public enum MessageType : uint
-        {           
+        {
             PRE_CREATE = 0x00000001,
             POST_CREATE = 0x00000002,
             PRE_FASTIO_READ = 0x00000004,
@@ -585,7 +588,7 @@ namespace EaseFilter.FilterControl
         /// <summary>
         /// The file changed events for monitor filter, it will be fired after the file handle was closed.
         /// </summary>
-        public enum FileChangedEvents:uint
+        public enum FileChangedEvents : uint
         {
             /// <summary>
             /// Fires this event when the new file was created after the file handle closed
@@ -636,7 +639,7 @@ namespace EaseFilter.FilterControl
         /// The change file access right
         /// </summary>
         public const uint ALLOW_FILE_CHANGE_ACCESS = (uint)(AccessFlag.ALLOW_WRITE_ACCESS
-               | AccessFlag.ALLOW_FILE_DELETE 
+               | AccessFlag.ALLOW_FILE_DELETE
                | AccessFlag.ALLOW_FILE_SIZE_CHANGE
                | AccessFlag.ALLOW_OPEN_WITH_CREATE_OR_OVERWRITE_ACCESS
                | AccessFlag.ALLOW_OPEN_WITH_DELETE_ACCESS
@@ -648,12 +651,12 @@ namespace EaseFilter.FilterControl
         /// The read file access right
         /// </summary>
         public const uint ALLOW_FILE_READ_ACCESS = (uint)(AccessFlag.ALLOW_OPEN_WITH_READ_ACCESS
-                                                |AccessFlag.ALLOW_READ_ACCESS
-                                                |AccessFlag.ALLOW_QUERY_INFORMATION_ACCESS
-                                                |AccessFlag.ALLOW_QUERY_SECURITY_ACCESS
-                                                |AccessFlag.ALLOW_FILE_MEMORY_MAPPED
-                                                |AccessFlag.ALLOW_DIRECTORY_LIST_ACCESS
-                                                |AccessFlag.ALLOW_READ_ENCRYPTED_FILES );
+                                                | AccessFlag.ALLOW_READ_ACCESS
+                                                | AccessFlag.ALLOW_QUERY_INFORMATION_ACCESS
+                                                | AccessFlag.ALLOW_QUERY_SECURITY_ACCESS
+                                                | AccessFlag.ALLOW_FILE_MEMORY_MAPPED
+                                                | AccessFlag.ALLOW_DIRECTORY_LIST_ACCESS
+                                                | AccessFlag.ALLOW_READ_ENCRYPTED_FILES);
 
         /// <summary>
         /// control the access rights of the file IO,set the accessFlag to LEAST_ACCESS_FLAG if you want to least access rights to the files. 
@@ -712,9 +715,9 @@ namespace EaseFilter.FilterControl
             /// Allow to query file information.
             /// </summary>
             ALLOW_QUERY_INFORMATION_ACCESS = 0x00000800,
-           /// <summary>
-           /// Allow to change the file information:file attribute,file size,file name,delete file
-           /// </summary>
+            /// <summary>
+            /// Allow to change the file information:file attribute,file size,file name,delete file
+            /// </summary>
             ALLOW_SET_INFORMATION = 0x00001000,
             /// <summary>
             /// Allow to rename the file.
@@ -753,34 +756,35 @@ namespace EaseFilter.FilterControl
             /// </summary>
             ALLOW_READ_ENCRYPTED_FILES = 0x00200000,
             /// <summary>
-            /// Allow the application to create a new file after it opened the protected file.
+            /// If the flag is turned off, the application will be blocked from creating a new file after opening a protected file 
+            /// when the filter rule’s boolean configuration ENABLE_BLOCK_SAVE_AS_FLAG is enabled.
             /// </summary>
             ALLOW_ALL_SAVE_AS = 0x00400000,
             /// <summary>
-            /// Allow copy protected files out of the protected folder if ALLOW_ALL_SAVE_AS is enabled.
+            ///If the flag is turned off, copy-and-paste from Windows Explorer will be blocked. This applies only to Windows 11 or later versions.
             /// </summary>
-            ALLOW_COPY_PROTECTED_FILES_OUT = 0x00800000,
+            ALLOW_COPY_AND_PASTE = 0x00800000,
             /// <summary>
             /// Allow the file to be mapped into memory access.
             /// </summary>
             ALLOW_FILE_MEMORY_MAPPED = 0x01000000,
             /// <summary>
-            /// if the encryption filter rule is enabled, it will encrypt unencrypted data on read when the flag value is 0.
+            /// this flag is reserved for future use.
             /// </summary>
-            DISABLE_ENCRYPT_DATA_ON_READ = 0x02000000,
+            RESERVE_FLAG = 0x02000000,
             /// <summary>
             /// prevent the protected files from being copying out to the USB when the flag value is 0.
             /// </summary>
-            ALLOW_COPY_PROTECTED_FILES_TO_USB = 0x04000000, 
+            ALLOW_COPY_PROTECTED_FILES_TO_USB = 0x04000000,
             /// <summary>
             /// If it is not exclude filter rule,the access flag can't be 0, at least you need to include this flag
             /// for filter driver to process this filter rule.
             /// </summary>
             LEAST_ACCESS_FLAG = 0xf0000000,
-          //  ALLOW_MAX_RIGHT_ACCESS = 0xfffffff0,
+            //  ALLOW_MAX_RIGHT_ACCESS = 0xfffffff0,
         }
 
-        const uint AES_VERIFICATION_KEY	 = 0xccb76e80;
+        const uint AES_VERIFICATION_KEY = 0xccb76e80;
         const int default_header_size = 1024;
 
         /// <summary>
@@ -815,7 +819,7 @@ namespace EaseFilter.FilterControl
             public byte[] TagData;
 
         };
-     
+
         /// <summary>
         /// This is the data structure the filter driver send request to the user mode service.
         /// </summary>
@@ -829,97 +833,97 @@ namespace EaseFilter.FilterControl
             /// <summary>
             /// This is the command Id which was sent by filter driver.
             /// </summary>
-            public uint FilterCommand;     
+            public uint FilterCommand;
             /// <summary>
             /// This is the  sequential message Id, just for reference.
             /// </summary>
-            public uint MessageId;          
+            public uint MessageId;
             /// <summary>
             /// This the filter rule Id associated to the filter rule.
             /// </summary>
-            public uint FilterRuleId;       
+            public uint FilterRuleId;
             /// <summary>
             /// This is the ip address of the remote computer when it accesses the file via SMB.
             /// it is only effected for win 7 or later OS.
             /// </summary>
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = INET_ADDR_STR_LEN*2)]
-            public byte[] RemoteIP;    
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = INET_ADDR_STR_LEN * 2)]
+            public byte[] RemoteIP;
             /// <summary>
             ///the address of FileObject,it is equivalent to file handle,it is unique per file stream open.
             /// </summary>
-            public IntPtr FileObject;       
+            public IntPtr FileObject;
             /// <summary>
             ///the address of FsContext,it is unique per file.
             /// </summary>
-            public IntPtr FsContext;        
+            public IntPtr FsContext;
             /// <summary>
             ///the message type of the file I/O, registry class.
             /// </summary>
-            public ulong MessageType;        
+            public ulong MessageType;
             /// <summary>
             ///the process ID for the process associated with the thread that originally requested the I/O operation.
             /// </summary>
-            public uint ProcessId;          
+            public uint ProcessId;
             /// <summary>
             ///the thread ID which requested the I/O operation.
             /// </summary>
-            public uint ThreadId;           
+            public uint ThreadId;
             /// <summary>
             ///the read/write offset.
             /// </summary>
-            public long Offset;             
+            public long Offset;
             /// <summary>
             ///the read/write length.
             /// </summary>
-            public uint Length;             
+            public uint Length;
             /// <summary>
             ///the size of the file for the I/O operation.
             /// </summary>
-            public long FileSize;           
+            public long FileSize;
             /// <summary>
             ///the transaction time in UTC of this request.
             /// </summary>
-            public long TransactionTime;    
+            public long TransactionTime;
             /// <summary>
             ///the creation time in UTC of the file.
             /// </summary>
-            public long CreationTime;       
+            public long CreationTime;
             /// <summary>
             ///the last access time in UTC of the file.
             /// </summary>
-            public long LastAccessTime;     
+            public long LastAccessTime;
             /// <summary>
             ///the last write time in UTC of the file.
             /// </summary>
-            public long LastWriteTime;      
+            public long LastWriteTime;
             /// <summary>
             ///the file attributes.
             /// </summary>
-            public uint FileAttributes;     
+            public uint FileAttributes;
             /// <summary>
             ///the DesiredAccess for file open, please reference CreateFile windows API.
             /// </summary>
-            public uint DesiredAccess;      
+            public uint DesiredAccess;
             /// <summary>
             ///the Disposition for file open, please reference CreateFile windows API.
             /// </summary>
-            public uint Disposition;        
+            public uint Disposition;
             /// <summary>
             ///the SharedAccess for file open, please reference CreateFile windows API.
             /// </summary>
-            public uint SharedAccess;       
+            public uint SharedAccess;
             /// <summary>
             ///the CreateOptions for file open, please reference CreateFile windows API.
             /// </summary>
-            public uint CreateOptions;      
+            public uint CreateOptions;
             /// <summary>
             ///the CreateStatus after file was openned, please reference CreateFile windows API.
             /// </summary>
-            public uint CreateStatus;       
+            public uint CreateStatus;
             /// <summary>
             ///this is the information class for security/directory/information IO 
             /// </summary>
-            public uint InfoClass;          
+            public uint InfoClass;
             /// <summary>
             ///the I/O status which returned from file system.
             /// </summary>
@@ -931,31 +935,31 @@ namespace EaseFilter.FilterControl
             /// <summary>
             ///the file name length in byte.
             /// </summary>
-            public uint FileNameLength;     
+            public uint FileNameLength;
             /// <summary>
             ///the file name of the I/O operation.
             /// </summary>
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_FILE_NAME_LENGTH)]
-            public string FileName;         
+            public string FileName;
             /// <summary>
             ///the length of the security identifier.
             /// </summary>
-            public uint SidLength;          
+            public uint SidLength;
             /// <summary>
             ///the security identifier data.
             /// </summary>
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_SID_LENGTH)]
-            public byte[] Sid;                  
+            public byte[] Sid;
             /// <summary>
             ///the data buffer length.
             /// </summary>
-            public uint DataBufferLength;   
+            public uint DataBufferLength;
             /// <summary>
             ///the data buffer which contains read/write/query information/set information data.
             /// </summary>
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_MESSAGE_LENGTH)]
-            public byte[] DataBufferEx;       
-            
+            public byte[] DataBufferEx;
+
         }
 
         /// <summary>
@@ -1031,49 +1035,130 @@ namespace EaseFilter.FilterControl
 
         }
 
-       
+        public enum PAGE_PROTECTION_FLAGS : uint
+        {
+            PAGE_NOACCESS = 0x00000001,
+            PAGE_READONLY = 0x00000002,
+            PAGE_READWRITE = 0x00000004,
+            PAGE_WRITECOPY = 0x00000008,
+            PAGE_EXECUTE = 0x00000010,
+            PAGE_EXECUTE_READ = 0x00000020,
+            PAGE_EXECUTE_READWRITE = 0x00000040,
+            PAGE_EXECUTE_WRITECOPY = 0x00000080,
+        }
+
+        /// <summary>
+        ///The AcquireForSectionSynchronization structure used for file memory-mapped access.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct AcquireForSectionSynchronization
+        {
+            /// <summary>
+            ///Type of synchronization requested for the section. 
+            ///Set to SyncTypeCreateSection if a section is being created; SyncTypeOther otherwise.
+            /// </summary>
+            public uint SyncType;
+            /// <summary>
+            /// Type of page protection requested for the section. Must be zero if SyncType is SyncTypeOther. 
+            /// Otherwise, one of the following flags, possibly ORed with PAGE_NOCACHE:
+            //PAGE_NOACCESS
+            //PAGE_READONLY
+            //PAGE_READWRITE
+            //PAGE_WRITECOPY
+            //PAGE_EXECUTE
+            //PAGE_EXECUTE_READ
+            //PAGE_EXECUTE_READWRITE
+            //PAGE_EXECUTE_WRITECOPY
+            //PAGE_GUARD
+            //PAGE_NOCACHE
+            //PAGE_WRITECOMBINE
+            /// </summary>
+            public PAGE_PROTECTION_FLAGS PageProtection;
+            /// <summary>
+            /// The size of the structure FS_FILTER_SECTION_SYNC_OUTPUT which contains information describing the attributes of the section that is being created..
+            /// </summary>
+            public uint StructureSize;
+            /// <summary>
+            /// The size of the structure which has been successfully populated with information on completion.
+            /// </summary>
+            public uint SizeReturned;
+            /// <summary>
+            /// Specifies the support for synchronization. The following values can be used:
+            /// FS_FILTER_SECTION_SYNC_SUPPORTS_ASYNC_PARALLEL_IO 0x00000001;
+            /// FS_FILTER_SECTION_SYNC_SUPPORTS_DIRECT_MAP_DATA	0x00000002;
+            /// FS_FILTER_SECTION_SYNC_SUPPORTS_DIRECT_MAP_IMAGE 0x00000004;
+            /// </summary>
+            public uint SYNC_OUTPUT_Flags;
+            /// <summary>
+            /// Specifies the optimal size for efficient reads. Faults from the section will attempt, 
+            /// but not guarantee, to read in multiples of this size. This value should be a multiple of PAGE_SIZE.
+            /// </summary>
+            public uint DesiredReadAlignment;
+            /// <summary>
+            /// When SyncType is SyncTypeCreateSection, Flags can be one of the following values:
+            //FS_FILTER_SECTION_SYNC_IN_FLAG_DONT_UPDATE_LAST_ACCESS(0x00000001)
+            //FS_FILTER_SECTION_SYNC_IN_FLAG_DONT_UPDATE_LAST_WRITE(0x00000002)
+            /// </summary>
+            public uint Flags;
+            /// <summary>
+            /// // Specified if SyncType is SyncTypeCreateSection
+            /// </summary>
+            public uint AllocationAttributes;
+
+        }
+
+
         /// <summary>
         /// the structure of the attached volume information
         /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-      public struct VOLUME_INFO
-      {
-          /// <summary>
-          /// The length of the volume name.
-          /// </summary>
-          public uint VolumeNameLength;
-          /// <summary>
-          /// The volume name buffer.
-          /// </summary>
-          [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_FILE_NAME_LENGTH)]
-          public string VolumeName;
-          /// <summary>
-          /// The length of the volume dos file name.
-          /// </summary>
-          public uint VolumeDosNameLength;
-          /// <summary>
-          /// The volume dos file name buffer.
-          /// </summary>
-          [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_FILE_NAME_LENGTH)]
-          public string VolumeDosName;
-          /// <summary>
-          ///the volume file system type.
-          /// </summary>
-          public uint VolumeFilesystemType;
-          /// <summary>
-          ///the Characteristics of the attached device object if existed. 
-          /// </summary>
-          public uint DeviceCharacteristics;
+        public struct VOLUME_INFO
+        {
+            /// <summary>
+            /// The length of the volume name.
+            /// </summary>
+            public uint VolumeNameLength;
+            /// <summary>
+            /// The volume name buffer.
+            /// </summary>
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_FILE_NAME_LENGTH)]
+            public string VolumeName;
+            /// <summary>
+            /// The length of the volume dos file name.
+            /// </summary>
+            public uint VolumeDosNameLength;
+            /// <summary>
+            /// The volume dos file name buffer.
+            /// </summary>
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_FILE_NAME_LENGTH)]
+            public string VolumeDosName;
+            /// <summary>
+            /// The length of the volume hardware Id.
+            /// </summary>
+            public uint HardwareIdLength;
+            /// <summary>
+            /// The hardware Id name.
+            /// </summary>
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_FILE_NAME_LENGTH)]
+            public string HardwareId;
+            /// <summary>
+            ///the volume file system type.
+            /// </summary>
+            public uint VolumeFilesystemType;
+            /// <summary>
+            ///the Characteristics of the attached device object if existed. 
+            /// </summary>
+            public uint DeviceCharacteristics;
 
-      }
+        }
 
-    /// <summary>
-    /// Set the volume control to get the notification of the attached volume information.
-    /// </summary>
-    /// <param name="volumeControlFlag"></param>
-    /// <returns></returns>
-      [DllImport("FilterAPI.dll", SetLastError = true)]
-      public static extern bool SetVolumeControlFlag(uint volumeControlFlag);
+        /// <summary>
+        /// Set the volume control to get the notification of the attached volume information.
+        /// </summary>
+        /// <param name="volumeControlFlag"></param>
+        /// <returns></returns>
+        [DllImport("FilterAPI.dll", SetLastError = true)]
+        public static extern bool SetVolumeControlFlag(uint volumeControlFlag);
 
         /// <summary>
         /// the data structuct sent by the process filter driver
@@ -1104,7 +1189,7 @@ namespace EaseFilter.FilterControl
             /// <summary>
             /// A Boolean value that specifies whether the ImageFileName member contains the exact file name that is used to open the process executable file.
             /// </summary>
-            public bool FileOpenNameAvailable;      
+            public bool FileOpenNameAvailable;
             /// <summary>
             /// The length of the command line.
             /// </summary>
@@ -1128,13 +1213,13 @@ namespace EaseFilter.FilterControl
             BLOCK_DATA_WAS_RETURNED = 0x00000008,           //Set this flag if return read block databuffer to filter.
             CACHE_FILE_WAS_RETURNED = 0x00000010,           //Set this flag if the stub file was restored.
             REHYDRATE_FILE_VIA_CACHE_FILE = 0x00000020,     //Set this flag if the whole cache file was downloaded and you want to rehydrate the file from the cache file.
-        }    
+        }
 
         /// <summary>
         /// this is the data structure which will be returned back to the filter driver.
         /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public  struct MessageReplyData
+        public struct MessageReplyData
         {
             public uint MessageId;
             public uint MessageType;
@@ -1181,14 +1266,7 @@ namespace EaseFilter.FilterControl
         /// <param name="key"></param>
         /// <returns></returns>
         [DllImport("FilterAPI.dll", SetLastError = true)]
-        public static extern bool SetRegistrationKey([MarshalAs(UnmanagedType.LPStr)]string key);
-
-        /// <summary>
-        /// disconnect the communication channel of the filter driver.
-        /// </summary>
-        /// <returns></returns>
-        [DllImport("FilterAPI.dll", SetLastError = true)]
-        public static extern bool Disconnect();
+        public static extern bool SetRegistrationKey([MarshalAs(UnmanagedType.LPStr)] string key);     
 
         /// <summary>
         /// get the last error message if the filter driver API return false.
@@ -1198,22 +1276,36 @@ namespace EaseFilter.FilterControl
         /// <returns></returns>
         [DllImport("FilterAPI.dll", SetLastError = true)]
         public static extern bool GetLastErrorMessage(
-            [MarshalAs(UnmanagedType.LPWStr)] 
+            [MarshalAs(UnmanagedType.LPWStr)]
             string lastError,
             ref int messageLength);
 
         /// <summary>
-        /// Create the filter driver connection with callback settings
+        ///Start the filter driver service.
         /// </summary>
-        /// <param name="threadCount">the number of working threads waitting for the callback message</param>
-        /// <param name="filterCallback">the callback function</param>
-        /// <param name="disconnectCallback">the disconnect callback function</param>
+        /// <param name="licenseKey">A valid license key required to authorize and start the filter driver service.</param>
+        /// <param name="threadCount">The number of worker threads waiting for callback messages.</param>        
+        /// <param name="createConnectionPerThread">If true, a unique filter connection is created for each thread. If false, a single shared connection is used.</param>
+        /// <param name="processMessageInRoundRobin">Only applicable if createConnectionPerThread is true.
+        /// If true, messages are distributed across connections in a round-robin fashion.If false, messages from the same Thread ID are pinned to the same connection.</param>
+        /// <param name="messageCallback">The primary callback function for processing filter messages.</param>
+        /// <param name="disconnectCallback">The callback function invoked when the service disconnects.</param>
+        /// <returns>Returns BOOL: TRUE if the service started successfully; FALSE otherwise.</returns>
+        [DllImport("FilterAPI.dll", SetLastError = true)]
+        public static extern bool StartFilter(
+            [MarshalAs(UnmanagedType.LPStr)] string licenseKey,
+            int threadCount,            
+            bool createConnectionPerThread,
+            bool processMessageInRoundRobin,
+            IntPtr messageCallback,
+            IntPtr disconnectCallback);
+
+        /// <summary>
+        /// Stops the filter driver from intercepting I/O requests. This effectively puts the driver into a passive state without uninstalling it from the system.
+        /// </summary>
         /// <returns></returns>
         [DllImport("FilterAPI.dll", SetLastError = true)]
-        public static extern bool RegisterMessageCallback(
-            int threadCount,
-            IntPtr filterCallback,
-            IntPtr disconnectCallback);
+        public static extern bool StopFilter();
 
         /// <summary>
         /// reset the filter driver config settings to the default value.
@@ -1613,7 +1705,7 @@ namespace EaseFilter.FilterControl
         /// </summary>
         public const uint ALLOW_CHANGE_REGITRY_ACCESS_FLAG = (uint)(RegControlFlag.REG_ALLOW_CREATE_KEY
             | RegControlFlag.REG_ALLOW_RENAME_KEY | RegControlFlag.REG_ALLOW_DELETE_KEY | RegControlFlag.REG_ALLOW_SET_VALUE_KEY_INFORMATION
-            | RegControlFlag.REG_ALLOW_DELETE_VALUE_KEY | RegControlFlag.REG_ALLOW_SET_KEY_SECRUITY | RegControlFlag.REG_ALLOW_RESTORE_KEY
+            | RegControlFlag.REG_ALLOW_DELETE_VALUE_KEY | RegControlFlag.REG_ALLOW_SET_KEY_SECURITY | RegControlFlag.REG_ALLOW_RESTORE_KEY
             | RegControlFlag.REG_ALLOW_REPLACE_KEY | RegControlFlag.REG_ALLOW_LOAD_KEY);
 
         /// <summary>
@@ -1634,7 +1726,7 @@ namespace EaseFilter.FilterControl
             REG_ALLOW_QUERY_MULTIPLE_VALUE_KEY = 0x00000400,
             REG_ALLOW_DELETE_VALUE_KEY = 0x00000800,
             REG_ALLOW_QUERY_KEY_SECURITY = 0x00001000,
-            REG_ALLOW_SET_KEY_SECRUITY = 0x00002000,
+            REG_ALLOW_SET_KEY_SECURITY = 0x00002000,
             REG_ALLOW_RESTORE_KEY = 0x00004000,
             REG_ALLOW_REPLACE_KEY = 0x00008000,
             REG_ALLOW_SAVE_KEY = 0x00010000,
@@ -2309,7 +2401,14 @@ namespace EaseFilter.FilterControl
         /// <returns></returns>
         [DllImport("FilterAPI.dll", SetLastError = true)]
         public static extern uint GetComputerId();
-   
+
+        /// <summary>
+        /// Get the GetComputerGuid 
+        /// </summary>
+        /// <returns></returns>
+        [DllImport("FilterAPI.dll", SetLastError = true)]
+        public static extern Guid GetComputerGuid();
+
 
         public static string GetLastErrorMessage()
         {

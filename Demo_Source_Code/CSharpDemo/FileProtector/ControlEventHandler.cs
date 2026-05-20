@@ -74,9 +74,9 @@ namespace FileProtector
 
         }
 
-       
+
         /// <summary>
-        /// Fires this event after the new file was created, the handle is not closed.
+        /// Fires this event before the new file was created, the handle is not closed.
         /// </summary>
         public void OnPreCreateFile(object sender, FileCreateEventArgs e)
         {
@@ -109,7 +109,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the read IO was returned.
+        /// Fires this event before the read IO was returned.
         /// </summary>
         public void OnPreFileRead(object sender, FileReadEventArgs e)
         {
@@ -121,6 +121,9 @@ namespace FileProtector
             //    //test block the file read here.
             //    e.ReturnStatus = NtStatus.Status.AccessDenied;
             //}
+
+            //if you want to read or modify the data buffer, make sure you 
+            //set EnableSendReadOrWriteBuffer to true in FileFilterRule.
         }
 
         /// <summary>
@@ -130,15 +133,21 @@ namespace FileProtector
         {
             DisplayEventMessage(e);
             //do your job here.
+
+            //if you want to read or modify the data buffer, make sure you 
+            //set EnableSendReadOrWriteBuffer to true in FileFilterRule.
         }
 
         /// <summary>
-        /// Fires this event after the write IO was returned.
+        /// Fires this event before the write IO was returned.
         /// </summary>
         public void OnPreFileWrite(object sender, FileWriteEventArgs e)
         {
             DisplayEventMessage(e);
             //do your job here.
+
+            //if you want to read or modify the data buffer, make sure you 
+            //set EnableSendReadOrWriteBuffer to true in FileFilterRule.
 
             //if (string.Compare(YourTestFileName, e.FileName, true) == 0)
             //{
@@ -154,10 +163,13 @@ namespace FileProtector
         {
             DisplayEventMessage(e);
             //do your job here.
+
+            //if you want to read or modify the data buffer, make sure you 
+            //set EnableSendReadOrWriteBuffer to true in FileFilterRule.
         }
 
         /// <summary>
-        /// Fires this event after the query file size IO was returned.
+        /// Fires this event before the query file size IO was returned.
         /// </summary>
         public void OnPreQueryFileSize(object sender, FileSizeEventArgs e)
         {
@@ -196,7 +208,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the query file basic information IO was returned.
+        /// Fires this event before the query file basic information IO was returned.
         /// </summary>
         public void OnPreQueryFileBasicInfo(object sender, FileBasicInfoEventArgs e)
         {
@@ -236,7 +248,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the query file standard information IO was returned.
+        /// Fires this event before the query file standard information IO was returned.
         /// </summary>
         public void OnPreQueryFileStandardInfo(object sender, FileStandardInfoEventArgs e)
         {
@@ -276,7 +288,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the query file network information IO was returned.
+        /// Fires this event before the query file network information IO was returned.
         /// </summary>
         public void OnPreQueryFileNetworkInfo(object sender, FileNetworkInfoEventArgs e)
         {
@@ -317,7 +329,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the query file Id IO was returned.
+        /// Fires this event before the query file Id IO was returned.
         /// </summary>
         public void OnPreQueryFileId(object sender, FileIdEventArgs e)
         {
@@ -341,7 +353,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the query file info IO was returned.
+        /// Fires this event before the query file info IO was returned.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -378,7 +390,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the set file size IO was returned.
+        /// Fires this event before the set file size IO was returned.
         /// </summary>
         public void OnPreSetFileSize(object sender, FileSizeEventArgs e)
         {
@@ -403,7 +415,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the set file basic information was returned.
+        /// Fires this event before the set file basic information was returned.
         /// </summary>
         public void OnPreSetFileBasicInfo(object sender, FileBasicInfoEventArgs e)
         {
@@ -428,7 +440,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the set file standard information IO was returned.
+        /// Fires this event before the set file standard information IO was returned.
         /// </summary>
         public void OnPreSetFileStandardInfo(object sender, FileStandardInfoEventArgs e)
         {
@@ -454,7 +466,7 @@ namespace FileProtector
 
 
         /// <summary>
-        /// Fires this event after the set file network information IO was returned.
+        /// Fires this event before the set file network information IO was returned.
         /// </summary>
         public void OnPreSetFileNetworkInfo(object sender, FileNetworkInfoEventArgs e)
         {
@@ -480,7 +492,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the file was moved or renamed.
+        /// Fires this event before the file was moved or renamed.
         /// </summary>
         public void OnPreMoveOrRenameFile(object sender, FileMoveOrRenameEventArgs e)
         {
@@ -505,7 +517,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the delete IO was returned.
+        /// Fires this event before the delete IO was returned.
         /// </summary>
         public void OnPreDeleteFile(object sender, FileIOEventArgs e)
         {
@@ -529,7 +541,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the set file info IO was returned.
+        /// Fires this event before the set file info IO was returned.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -561,7 +573,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the query file security IO was returned.
+        /// Fires this event before the query file security IO was returned.
         /// </summary>
         public void OnPreQueryFileSecurity(object sender, FileSecurityEventArgs e)
         {
@@ -588,7 +600,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the set file security IO was returned.
+        /// Fires this event before the set file security IO was returned.
         /// </summary>
         public void OnPreSetFileSecurity(object sender, FileSecurityEventArgs e)
         {
@@ -613,7 +625,7 @@ namespace FileProtector
 
 
         /// <summary>
-        /// Fires this event after the directory enumeration query IO was returned.
+        /// Fires this event before the directory enumeration query IO was returned.
         /// </summary>
         public void OnPreQueryDirectoryFile(object sender, FileQueryDirectoryEventArgs e)
         {
@@ -642,9 +654,39 @@ namespace FileProtector
 
         }
 
+        /// <summary>
+        /// Fires this event before the file was memory mapped.
+        /// </summary>
+        public void OnPreFileMemoryMapped(object sender, FileIOEventArgs e)
+        {
+            DisplayEventMessage(e);
+            //do your job here.
+
+
+            //if (string.Compare(YourTestFileName, e.FileName, true) == 0)
+            //{
+            //    //test block the file to be memory mapped.
+            //    e.ReturnStatus = NtStatus.Status.AccessDenied;
+            //}
+        }
 
         /// <summary>
-        /// Fires this event after the file was cleanuped.
+        /// Fires this event after the file was memory mapped.
+        /// </summary>
+        public void OnPostFileMemoryMapped(object sender, FileIOEventArgs e)
+        {
+            DisplayEventMessage(e);
+            //do your job here.
+
+            //get the data of the directory file list based on the information class.
+            //e.fileInfomationClass;
+            //e.directoryBuffer;
+
+        }
+
+
+        /// <summary>
+        /// Fires this event before the file was cleanuped.
         /// </summary>
         public void OnPreFileHandleClose(object sender, FileIOEventArgs e)
         {
@@ -662,7 +704,7 @@ namespace FileProtector
         }
 
         /// <summary>
-        /// Fires this event after the last file handle of the file was closed.
+        /// Fires this event before the last file handle of the file was closed.
         /// </summary>
         public void OnPreFileClose(object sender, FileIOEventArgs e)
         {

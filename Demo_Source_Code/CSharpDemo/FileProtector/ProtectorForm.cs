@@ -92,6 +92,7 @@ namespace FileProtector
                 fileFilter.OnFileOpen += monitorEventHandler.OnFileOpen;
                 fileFilter.OnNewFileCreate += monitorEventHandler.OnNewFileCreate;
                 fileFilter.OnDeleteFile += monitorEventHandler.OnDeleteFile;
+                fileFilter.OnFileMemoryMapped += monitorEventHandler.OnFileMemoryMapped;
                 fileFilter.OnFileRead += monitorEventHandler.OnFileRead;
                 fileFilter.OnFileWrite += monitorEventHandler.OnFileWrite;
                 fileFilter.OnQueryFileBasicInfo += monitorEventHandler.OnQueryFileBasicInfo;
@@ -116,6 +117,7 @@ namespace FileProtector
                 //add the control pre-event handler for the control file filter.
                 fileFilter.OnPreCreateFile += controlEventHandler.OnPreCreateFile;
                 fileFilter.OnPreDeleteFile += controlEventHandler.OnPreDeleteFile;
+                fileFilter.OnPreFileMemoryMapped += controlEventHandler.OnPreFileMemoryMapped;
                 fileFilter.OnPreFileRead += controlEventHandler.OnPreFileRead;
                 fileFilter.OnPreFileWrite += controlEventHandler.OnPreFileWrite;
                 fileFilter.OnPreQueryFileBasicInfo += controlEventHandler.OnPreQueryFileBasicInfo;
@@ -137,6 +139,7 @@ namespace FileProtector
                 //add the control post-event handler for the control file filter.
                 fileFilter.OnPostCreateFile += controlEventHandler.OnPostCreateFile;
                 fileFilter.OnPostDeleteFile += controlEventHandler.OnPostDeleteFile;
+                fileFilter.OnPostFileMemoryMapped += controlEventHandler.OnPostFileMemoryMapped;
                 fileFilter.OnPostFileRead += controlEventHandler.OnPostFileRead;
                 fileFilter.OnPostFileWrite += controlEventHandler.OnPostFileWrite;
                 fileFilter.OnPostQueryFileBasicInfo += controlEventHandler.OnPostQueryFileBasicInfo;
@@ -199,13 +202,14 @@ namespace FileProtector
         {
             try
             {
-                //Purchase a license key with the link: http://www.easefilter.com/Order.htm
-                //Email us to request a trial key: info@easefilter.com //free email is not accepted.        
+                //To request a trial or production license key, please contact info@easefilter.com
+                //Requests from free email domains are not accepted        
                 string licenseKey = GlobalConfig.LicenseKey;
 
                 string lastError = string.Empty;
 
-                bool ret = filterControl.StartFilter(GlobalConfig.filterType, GlobalConfig.FilterConnectionThreads, GlobalConfig.ConnectionTimeOut, licenseKey, ref lastError);
+                bool ret = filterControl.StartFilter(GlobalConfig.filterType, GlobalConfig.FilterConnectionThreads,
+                    GlobalConfig.CreateConnectionPerThread, GlobalConfig.ProcessMessageInRoundRobin, GlobalConfig.ConnectionTimeOut, licenseKey, ref lastError);
                 if (!ret)
                 {
                     MessageBoxHelper.PrepToCenterMessageBoxOnForm(this);
@@ -349,11 +353,12 @@ namespace FileProtector
         private void toolStripButton_Help_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://blog.easefilter.com/file-protector-demo-step-by-step/");
-        }
+        }      
 
-        private void toolStripButton_ApplyTrialKey_Click(object sender, EventArgs e)
+        private void toolStripButton_Video_Click(object sender, EventArgs e)
         {
+            System.Diagnostics.Process.Start("https://youtu.be/__owEKeiL7A?si=WopqsAWV_eoaQM39");
         }
-       
+      
     }
 }

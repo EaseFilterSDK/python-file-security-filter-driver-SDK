@@ -234,15 +234,6 @@ namespace EaseFilter.CommonObjects
                 checkBox_Creation.Checked = false;
             }
 
-            if ((accessFlags & (uint)FilterAPI.AccessFlag.ALLOW_QUERY_SECURITY_ACCESS) > 0)
-            {
-                checkBox_EnableEncryptionOnRead.Checked = true;
-            }
-            else
-            {
-                checkBox_EnableEncryptionOnRead.Checked = false;
-            }
-
             if ((accessFlags & (uint)FilterAPI.AccessFlag.ALLOW_SET_SECURITY_ACCESS) > 0)
             {
                 checkBox_SetSecurity.Checked = true;
@@ -261,13 +252,13 @@ namespace EaseFilter.CommonObjects
                 checkBox_AllowEncryptNewFile.Checked = false;
             }
 
-            if ((accessFlags & (uint)FilterAPI.AccessFlag.ALLOW_COPY_PROTECTED_FILES_OUT) > 0)
+            if ((accessFlags & (uint)FilterAPI.AccessFlag.ALLOW_COPY_AND_PASTE) > 0)
             {
-                checkBox_AllowCopyout.Checked = true;
+                checkBox_AllowCopyPaste.Checked = true;
             }
             else
             {
-                checkBox_AllowCopyout.Checked = false;
+                checkBox_AllowCopyPaste.Checked = false;
             }
 
             if ((accessFlags & (uint)FilterAPI.AccessFlag.ALLOW_READ_ENCRYPTED_FILES) > 0)
@@ -278,16 +269,7 @@ namespace EaseFilter.CommonObjects
             {
                 checkBox_AllowReadEncryptedFiles.Checked = false;
             }
-
-
-            if ((accessFlags & (uint)FilterAPI.AccessFlag.DISABLE_ENCRYPT_DATA_ON_READ) > 0)
-            {
-                checkBox_EnableEncryptionOnRead.Checked = false;
-            }
-            else
-            {
-                checkBox_EnableEncryptionOnRead.Checked = true;
-            }
+         
         }
 
         private void button_FileAccessFlags_Click(object sender, EventArgs e)
@@ -417,20 +399,6 @@ namespace EaseFilter.CommonObjects
             textBox_FileAccessFlags.Text = accessFlags.ToString();
         }
 
-        private void checkBox_EncryptionOnRead_CheckedChanged(object sender, EventArgs e)
-        {
-            uint accessFlags = uint.Parse(textBox_FileAccessFlags.Text.Trim());
-            if (checkBox_EnableEncryptionOnRead.Checked)
-            {
-                accessFlags &= ~(uint)FilterAPI.AccessFlag.DISABLE_ENCRYPT_DATA_ON_READ;
-            }
-            else
-            {
-                accessFlags |= (uint)FilterAPI.AccessFlag.DISABLE_ENCRYPT_DATA_ON_READ;
-            }
-
-            textBox_FileAccessFlags.Text = accessFlags.ToString();
-        }
 
         private void checkBox_SetSecurity_CheckedChanged(object sender, EventArgs e)
         {
@@ -462,16 +430,16 @@ namespace EaseFilter.CommonObjects
             textBox_FileAccessFlags.Text = accessFlags.ToString();
         }
 
-        private void checkBox_AllowCopyout_CheckedChanged(object sender, EventArgs e)
+        private void checkBox_AllowCopyPaste_CheckedChanged(object sender, EventArgs e)
         {
             uint accessFlags = uint.Parse(textBox_FileAccessFlags.Text.Trim());
-            if (checkBox_AllowCopyout.Checked)
+            if (checkBox_AllowCopyPaste.Checked)
             {
-                accessFlags |= (uint)FilterAPI.AccessFlag.ALLOW_COPY_PROTECTED_FILES_OUT;
+                accessFlags |= (uint)FilterAPI.AccessFlag.ALLOW_COPY_AND_PASTE;
             }
             else
             {
-                accessFlags &= ~(uint)FilterAPI.AccessFlag.ALLOW_COPY_PROTECTED_FILES_OUT;
+                accessFlags &= ~(uint)FilterAPI.AccessFlag.ALLOW_COPY_AND_PASTE;
             }
 
             textBox_FileAccessFlags.Text = accessFlags.ToString();
